@@ -1,0 +1,48 @@
+sudo adduser directeur
+sudo adduser secretaire
+sudo adduser comptable
+sudo adduser securite
+
+sudo addgroup directeur_comptable
+sudo addgroup directeur_secretaire
+
+sudo usermod -a -G directeur_comptable directeur #mampiditra anle user directeur anatinle groupe directeur_comptable
+sudo usermod -a -G directeur_comptable comptable
+sudo usermod -a -G directeur_secretaire directeur
+sudo usermod -a -G directeur_secretaire secretaire
+
+sudo mkdir /home/samba_shares
+sudo mkdir /home/samba_shares/directeur 
+sudo mkdir /home/samba_shares/secretaire
+sudo mkdir /home/samba_shares/comptable
+sudo mkdir /home/samba_shares/securite
+
+sudo chown directeur /home/samba_shares/directeur
+sudo chown secretaire:directeur_comptable /home/samba_shares/secretaire	#secretaire:tomponle dossier , directeur_comptable:groupe tomponle dossier
+sudo chown comptable:directeur_secretaire /home/samba_shares/comptable
+sudo chown securite:directeur /home/samba_shares/securite
+
+sudo chmod 700 /home/samba_shares/directeur
+sudo chmod 750 /home/samba_shares/secretaire #tompony:afaka read,write,execute ; #groupe tompony:afaka read,execute #sady tsy tompony no tsy groupe_tompony:tsy afaka manao inoninona
+sudo chmod 750 /home/samba_shares/comptable
+sudo chmod 750 /home/samba_shares/securite
+
+sudo smbpasswd -a directeur
+sudo smbpasswd -a secretaire
+sudo smbpasswd -a comptable
+sudo smbpasswd -a securite
+sudo smbpasswd -e directeur
+sudo smbpasswd -e secretaire
+sudo smbpasswd -e comptable
+sudo smbpasswd -e securite
+
+apina any @ farany
+[entreprise]
+	comment = Dossier de l'entreprise
+	path = /home/samba_shares
+	read only = no 	#afaka manoratra sy mamafa ny users
+	writable = yes	#afaka anoratana
+	browseable = yes  #hita ao @ explorateur de fichier ao @ network
+	guest ok = no #mila mampiditra user sy mot de passe rehefa hiditra ao aminio dossier io
+	valid users = directeur secretaire comptable securite #reo no user afaka mseconnecter aminio dossier io 
+	hide unreadable #rehefa tsy manana permission hamaky anle sub-dossier an'io dossier io le user de atao tsy hitany eo @ ecran oe misy anle sub-dossier tsy afaka vakiany ao aminio dossier io 
